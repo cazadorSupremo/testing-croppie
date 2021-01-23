@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="croppie/croppie.css" />
+  <script src="croppie/croppie.js"></script>
+  <style>
+  	img{
+  	  width: 100%;
+  	  height: auto;
+  	}
+  </style>
+</head>
+
+<body>
+<!--<form method="post" action="/upload-photo" enctype="multipart/form-data">-->
+<input type="file" id="archivo" name="foto">
+<img src="" id="imagen">
+<button id="subir">Subir</button>
+<!--</form>-->
+
+<script>
+var foto=document.getElementById('archivo');
+foto.addEventListener('change', ()=>{
+  var objectURL=URL.createObjectURL(foto.files[0]);
+  var imagen=document.getElementById('imagen');
+  imagen.src=objectURL;
+  var vanilla=new Croppie(imagen, {  //ejemplo de vanilla croppie
+    viewport: { width: 300, height: 300 },
+    boundary: { width: 500, height: 500, type: 'square'},
+    showZoomer: true,
+    enableOrientation: true
+  });
+  let subirFoto=document.getElementById('subir');
+  subirFoto.addEventListener('click', ()=>{
+    vanilla.result('blob').then(async (blob)=>{
+      let formdata=new FormData();
+      formdata.append('foto', blob); 
+      let req=await fetch('/upload-photo',{
+        method: 'POST',
+        body: formdata
+      });
+      let response=await req.json();
+      alert(response);
+    });
+  });
+});
+</script>
+
+</body>
+</html>
