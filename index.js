@@ -10,7 +10,7 @@ app.use(express.urlencoded({extended: false}));
 app.use('/croppie', express.static(__dirname + '/node_modules/croppie'));
 
 app.get('/', (req, res)=>{
-  res.sendFile('/home/freddy/Escritorio/croppie/index.html');
+  res.sendFile(route+'/index.html'); //route es el resto de la ruta! Sustituirla
 });
 
 app.post('/upload-photo', upload.single('foto'), async (req, res)=>{
